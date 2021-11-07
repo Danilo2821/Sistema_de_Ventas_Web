@@ -3,14 +3,14 @@
     Created on : 29/08/2021, 18:53:22
     Author     : Danim
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-        <title>JSP Page</title>
+        <title>Index</title>
     </head>
     <body>
         <div class="container mt-4 col-lg-4">
@@ -30,6 +30,7 @@
                             <label>Password:</label>
                             <input type="password" name="txtpass" class="form-control">
                         </div>
+                        <br>
                         <input type="submit" name="accion" value="Ingresar" class="btn btn-primary btn-block">
                     </form>
                     
