@@ -1,8 +1,3 @@
-<%-- 
-    Document   : Principal
-    Created on : 29/08/2021, 18:53:22
-    Author     : Danim
---%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -35,7 +30,7 @@
                             <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Cliente&accion=Listar" target="myFrame">Clientes</a>
                         </li>
                         <li class="nav-item">
-                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=NuevaVenta&accion=BuscarCliente" target="myFrame">Nueva Venta</a>
+                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=NuevaVenta&accion=default" target="myFrame">Nueva Venta</a>
                         </li>
                     </ul>
                 </div>
@@ -57,7 +52,7 @@
                 </div>
             </div>
         </nav>
-                        <div class="m-6" style="height: 700px;">
+                        <div class="m-6" style="height: 900px;">
                             <iframe name="myFrame" style="height: 100%; width: 100%; border: none"></iframe>
                         </div>
                         
