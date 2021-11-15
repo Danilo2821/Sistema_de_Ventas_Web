@@ -44,6 +44,28 @@ public class ClienteDAO {
         return cl;//este metodo va a retornar el cliente encontrado en nuestra BD
     }
 
+    
+         public Cliente buscarNombreCliente(String clientes){
+        Cliente cl = new Cliente();
+        String sql="select * from cliente where Nombres like '%"+clientes+"%'";
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                cl.setId(rs.getInt(1));//se usa la var del obj cliente con el metodo set para obtener los datos de los camp y guardarlos en el obj
+                cl.setDni(rs.getString(2));
+                cl.setNom(rs.getString(3));
+                cl.setDir(rs.getString(4));
+            }
+        } catch (Exception e) {
+
+        }
+        
+        return cl;
+    }
+    
+    
     //Operaciones CRUD
     public List listar() {
         String sql = "select * from cliente";

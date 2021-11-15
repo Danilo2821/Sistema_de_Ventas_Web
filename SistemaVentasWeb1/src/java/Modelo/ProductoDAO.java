@@ -47,6 +47,69 @@ public class ProductoDAO {
         return producto;
     }
 
+    
+    
+     public Producto buscar(int id){
+        Producto pro = new Producto();
+        String sql="select * from producto where idproducto="+id;
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                pro.setId(rs.getInt(1)); //Se utiliza el metodo set para obtener los valores de los campos y guardarlos en el objeto em
+                pro.setNom(rs.getString(2));
+                pro.setPrecio(rs.getDouble(3));
+                pro.setStock(rs.getInt(4));
+                pro.setEstado(rs.getString(5));// todo el objeto se agrega a la variable lista
+            }
+        } catch (Exception e) {
+
+        }
+        
+        return pro;
+    }
+    
+     public Producto buscarNombre(String nombre){
+        Producto pro = new Producto();
+        String sql="select * from producto where Nombres like '%"+nombre+"%'";
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                pro.setId(rs.getInt(1)); //Se utiliza el metodo set para obtener los valores de los campos y guardarlos en el objeto em
+                pro.setNom(rs.getString(2));
+                pro.setPrecio(rs.getDouble(3));
+                pro.setStock(rs.getInt(4));
+                pro.setEstado(rs.getString(5));// todo el objeto se agrega a la variable lista
+            }
+        } catch (Exception e) {
+
+        }
+        
+        return pro;
+    }
+    
+    
+    public int actualizarstock(int id, int stock){
+        String sql="update producto set Stock=? where idproducto=?";
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, stock);
+            ps.setInt(2, id);
+            ps.executeUpdate();//Con este metodo se van a agregar los datos a la BD
+
+        } catch (Exception e) {
+
+        }
+        
+        return r;
+    }
+    
+    
+    
     // el metodo agregar tiene como paramentro el objeto emplado
     public int agregar(Producto pro) {
         String sql = "insert into producto(Nombres,Precio,Stock,Estado)values(?,?,?,?)";
