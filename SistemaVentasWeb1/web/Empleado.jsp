@@ -1,8 +1,4 @@
-<%-- 
-    Document   : Empleado
-    Created on : 09/10/2021, 21:44:34
-    Author     : Danim
---%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,9 +9,44 @@
         <title>Empleado</title>
     </head>
     <body>
-        <div class="d-flex">
+        
+        <div class="col-sm-8" >
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <%-- <th>ID</th>--%>
+                        <th>DNI</th>
+                        <th>NOMBRES</th>
+                        <th>TELEFONO</th>
+                        <th>ESTADO</th>
+                        <th>USER</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="em" items="${empleados}" > <%-- Es el nombre del atributo con el cual estamos enviando dede el controlador --%>
+                    <tr>
+                       <%-- <td>${em.getId()}</td> Se usa la variable em para poder listar --%>
+                        <td>${em.getDni()}</td>
+                        <td>${em.getNom()}</td>
+                        <td>${em.getTel()}</td>
+                        <td>${em.getEstado()}</td>
+                        <td>${em.getUser()}</td>
+                        <td>
+                            <a class="btn btn-warning" href="Controlador?menu=Empleado&accion=Editar&id=${em.getId()}">Editar</a> <%-- Se captura el ID de la fila seleccionada --%>
+                            <a class="btn btn-danger" href="Controlador?menu=Empleado&accion=Delete&id=${em.getId()}">Delete</a>
+                        </td>
+                    </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div> 
+        <br><br>        
+        <div class="d-flex-xl-column-reverse">
                <div class="card col-sm-6">
-            <div class="card-body" >
+            <div class="card-body">
+                <label><h4>Modulo de Mantenimiento de Empleados: </h4></label>
+                    <br><br>
                 <form action="Controlador?menu=Empleado" method="POST">
                     <div class="form-group">
                         <label>Dni</label>
@@ -43,37 +74,8 @@
                 </form>
             </div>
         </div>
-        <div class="col-sm-8" >
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>DNI</th>
-                        <th>NOMBRES</th>
-                        <th>TELEFONO</th>
-                        <th>ESTADO</th>
-                        <th>USER</th>
-                        <th>ACCIONES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="em" items="${empleados}" > <%-- Es el nombre del atributo con el cual estamos enviando dede el controlador --%>
-                    <tr>
-                        <td>${em.getId()}</td><%-- Se usa la variable em para poder listar --%>
-                        <td>${em.getDni()}</td>
-                        <td>${em.getNom()}</td>
-                        <td>${em.getTel()}</td>
-                        <td>${em.getEstado()}</td>
-                        <td>${em.getUser()}</td>
-                        <td>
-                            <a class="btn btn-warning" href="Controlador?menu=Empleado&accion=Editar&id=${em.getId()}">Editar</a> <%-- Se captura el ID de la fila seleccionada --%>
-                            <a class="btn btn-danger" href="Controlador?menu=Empleado&accion=Delete&id=${em.getId()}">Delete</a>
-                        </td>
-                    </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div> 
+                    <br> <br>           
+        
         </div>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
