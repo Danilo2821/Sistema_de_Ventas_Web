@@ -11,8 +11,12 @@ import Modelo.Empleado;
 import Modelo.EmpleadoDAO;
 import Modelo.Producto;
 import Modelo.ProductoDAO;
+import Modelo.Venta;
+import Modelo.VentaDAO;
+import config.GenerarSerie;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -45,6 +49,20 @@ public class Controlador extends HttpServlet {
     Cliente cl = new Cliente(); //Se instancia la entidad empleado
     ClienteDAO cdao = new ClienteDAO(); //Se instancia la clase EmpleadoDAO que tiene los metodos que estan relacionados con la BD
     int idc;
+    
+     Venta v = new Venta();
+    List<Venta> lista = new ArrayList<>();
+    int item;
+    int cod;
+    String descripcion;
+    double precio;
+    int cant;
+    double subtotal;
+    double totalPagar;
+
+    String numeroserie;
+    VentaDAO vdao = new VentaDAO();
+    int idv;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -213,16 +231,113 @@ public class Controlador extends HttpServlet {
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
             
         }
-        if (menu.equals("NuevaVenta")) {
-            switch (accion){
+     if (menu.equals("NuevaVenta")) {
+            switch (accion) {
                 case "BuscarCliente":
-                    String dni=request.getParameter("codigocliente");//se recibe desde la caja de texto
+                    String dni = request.getParameter("codigocliente");//se recibe desde la caja de texto
                     cl.setDni(dni);//se envia el parametro a la clase ClienteDAO, para ejecutar el metodo buscar
-                    cl=cdao.buscar(dni);//se realiza la busqueda en la BD
+                    cl = cdao.buscar(dni);//se realiza la busqueda en la BD
                     request.setAttribute("cliente", cl);//se pueda mostrar en el form
+                    request.setAttribute("nserie", numeroserie);
                     break;
+                case "BuscarClienteNombre":
+                    String nomb = request.getParameter("clientes");//se recibe desde la caja de texto
+                    cl.setNom(nomb);//se envia el parametro a la clase ClienteDAO, para ejecutar el metodo buscar
+                    cl = cdao.buscarNombreCliente(nomb);//se realiza la busqueda en la BD
+                    request.setAttribute("cliente", cl);//se pueda mostrar en el form
+                    request.setAttribute("nserie", numeroserie);
+                    break;
+                case "BuscarProducto":
+                    int id = Integer.parseInt(request.getParameter("codigoproducto"));//se captura el id del producto
+                    pro = pdao.listarId(id);//la entidad producto pro va almacenar los datos que genera el metodo listan por id
+                    request.setAttribute("cliente", cl);
+                    request.setAttribute("producto", pro);//se envian los datos para que se muestren en el form
+                    request.setAttribute("lista", lista);//se envian los datos al form
+                    request.setAttribute("totalpagar", totalPagar);
+                    request.setAttribute("nserie", numeroserie);
+                    break;
+                case "BuscarProductoNombre":
+                    String nom = request.getParameter("nombres");//se captura el  del producto
+                    pro = pdao.buscarNombre(nom);//la entidad producto pro va almacenar los datos que genera el metodo listan por id
+                    request.setAttribute("cliente", cl);
+                    request.setAttribute("producto", pro);//se envian los datos para que se muestren en el form
+                    request.setAttribute("lista", lista);//se envian los datos al form
+                    request.setAttribute("totalpagar", totalPagar);
+                    request.setAttribute("nserie", numeroserie);
+                    break;
+                case "Agregar":
+                    request.setAttribute("cliente", cl);
+                    totalPagar = 0.0;//cada vez que se agrege un prod se inicializa en 0
+                    item = item + 1;//se capturan los valores de las variables declaradas al principio
+                    cod = pro.getId();
+                    descripcion = request.getParameter("nombres");
+                    precio = Double.parseDouble(request.getParameter("precio"));
+                    cant = Integer.parseInt(request.getParameter("cant"));
+                    subtotal = precio * cant;
+                    v = new Venta();
+                    v.setItem(item);//el objeto venta v esta capturando todos los valores que ingresa el usuario por medio del form
+                    v.setIdproducto(cod);
+                    v.setDescripcionP(descripcion);
+                    v.setPrecio(precio);
+                    v.setCantidad(cant);
+                    v.setSubtotal(subtotal);
+                    lista.add(v);//el objeto se agrega a la lista
+                    for (int i = 0; i < lista.size(); i++) {
+                        totalPagar = totalPagar + lista.get(i).getSubtotal();//total a pagar va a ser igual a la sumatoria de la columna subtotal, recorre la lista por medio del la variable index i    
+                    }
+                    request.setAttribute("totalpagar", totalPagar);
+                    request.setAttribute("lista", lista);//se envia al form
+                    request.setAttribute("nserie", numeroserie);
+                    break;
+
+                case "GenerarVenta":
+                    //Actualizacion del Stock
+                    for (int i = 0; i < lista.size(); i++){ //el bucle for recorre la cantidad de elementos que tiene agregado el comprobante de pago
+                    Producto pr=new Producto();
+                    int cantidad=lista.get(i).getCantidad();// estas dos variables van a recibir los valores que tiene la tabla de ventas
+                    int idproducto=lista.get(i).getIdproducto();
+                    ProductoDAO aO=new ProductoDAO();
+                    pr=aO.buscar(idproducto);//id del producto capturado en la lista
+                    int sac=pr.getStock()-cantidad;//stock actual se le resta la cantidad recibida desde la tabla
+                    aO.actualizarstock(idproducto, sac);//se envia el nuevo stock actualizado a la BD utilizando el metodo actualizarstock
+                    }
+                    //Guardar Venta
+                    v.setIdcliente(cl.getId());
+                    v.setIdempleado(2);//el id emplado debe ser el codigo del usu que ingreso al sistema
+                    v.setNumserie(numeroserie);
+                    v.setFecha("2019-06-14");
+                    v.setMonto(totalPagar);
+                    v.setEstado("1");
+                    vdao.guardarVenta(v);
+                    //Guardar Detalle ventas
+                    int idv = Integer.parseInt(vdao.IdVentas());//se almacena el id de la venta que se ha guardado
+                    for (int i = 0; i < lista.size(); i++) {
+                        v = new Venta();//se inicializa en vacio
+                        v.setId(idv);
+                        v.setIdproducto(lista.get(i).getIdproducto());//se captura el id del prod que esta en la lista
+                        v.setCantidad(lista.get(i).getCantidad());
+                        v.setPrecio(lista.get(i).getPrecio());
+                        vdao.guardarDetalleventas(v);//se guarda el detalle de ventas utilizando el metodo que esta en ventadao, el parametro v es la entidad de venta
+                    }
+                    break;
+
                 default:
-                    throw new AssertionError();
+                    v = new Venta();
+                    lista = new ArrayList<>();
+                    item = 0;
+                    totalPagar = 0.0;
+
+                    numeroserie = vdao.GenerarSerie();//la var numero de serie almacena el maximo del num de serie que existe en la BD
+                    if (numeroserie == null) {
+                        numeroserie = "00000001";
+                        request.setAttribute("nserie", numeroserie);//se envia al form
+                    } else {
+                        int incrementar = Integer.parseInt(numeroserie);//se convierte el numero de serie que esta en tipo string
+                        GenerarSerie gs = new GenerarSerie();
+                        numeroserie = gs.NumeroSerie(incrementar);//la variable numeroserie es igual al resultado de enviar la variable convertida en entero en incremetar al metodo numeroserie que esta en la clase instanciada de generarserie gs
+                        request.setAttribute("nserie", numeroserie);
+                    }
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
             }
             request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
         }
