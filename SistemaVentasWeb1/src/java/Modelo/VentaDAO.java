@@ -5,6 +5,8 @@ import config.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class VentaDAO {
@@ -51,12 +53,12 @@ public class VentaDAO {
     }
 
     public int guardarVenta(Venta ve) {
-        String sql = "insert into ventas(IdCliente, IdEmpleado, NumeroSerie, FechaVentas, Monto, Estado)values(?,?,?,?,?,?)";
+        String sql = "insert into ventas(IdCliente, Idusuario, NumeroSerie, FechaVentas, Monto, Estado)values(?,?,?,?,?,?)";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
             ps.setInt(1, ve.getIdcliente());
-            ps.setInt(2, ve.getIdempleado());
+            ps.setInt(2, ve.getIdusuario());
             ps.setString(3, ve.getNumserie());
             ps.setString(4, ve.getFecha());
             ps.setDouble(5, ve.getPrecio());
@@ -84,6 +86,31 @@ public class VentaDAO {
         }
 
         return r;
+    }
+    
+    
+    public List listarVenta() {
+        String sql = "select * from ventas";
+        List<Venta> ventas = new ArrayList<>();
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Venta ven = new Venta(); 
+                ven.setId(rs.getInt(1)); 
+                ven.setIdcliente(rs.getInt(2));
+                ven.setIdusuario(rs.getInt(3));
+                ven.setNumserie(rs.getString(4));
+                ven.setFecha(rs.getString(5));
+                ven.setMonto(rs.getDouble(6));
+                ven.setEstado(rs.getString(7));
+                ventas.add(ven);
+            }
+        } catch (Exception e) {
+
+        }
+        return ventas;
     }
    
 

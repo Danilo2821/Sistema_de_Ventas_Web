@@ -1,23 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controlador;
 
-import Modelo.Empleado;
-import Modelo.EmpleadoDAO;
+import Modelo.User;
+import Modelo.UserDAO;
+import config.Encriptador;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Danim
- */
+
 public class Validar extends HttpServlet {
 
     /**
@@ -30,11 +24,18 @@ public class Validar extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    EmpleadoDAO edao=new EmpleadoDAO();
-    Empleado em=new Empleado();
+    
+    User us = new User(); //Se instancia la entidad cliente
+    UserDAO udao = new UserDAO(); //Se instancia la clase ClienteDAO que tiene los metodos que estan relacionados con la BD
+    Encriptador encriptador = new Encriptador();
+    String usuario = "Iniciar Sesion";
+    String password = "Iniciar Sesion";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("usuario", usuario);
+        session.setAttribute("password", password);
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -80,18 +81,22 @@ public class Validar extends HttpServlet {
        if(accion.equalsIgnoreCase("Ingresar")){
            String user=request.getParameter("txtuser");
            String pass=request.getParameter("txtpass");
-           em=edao.validar(user, pass);
-           if(em.getUser()!=null){
-               request.setAttribute("usuario", em);
+           us=udao.validar(user, pass);
+           if(us != null && us.getUser()!=null){
+               usuario = us.getUser();
+               password = us.getPass();      
+               request.setAttribute("usuario", us);
                request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);
            }else{
-               request.getRequestDispatcher("index.jsp").forward(request, response);
-           }   
-       }
-       else{
           request.getRequestDispatcher("index.jsp").forward(request, response); 
        }
+    }else if(accion.equalsIgnoreCase("Salir")){
+            HttpSession session = request.getSession();
+            session.invalidate();
+            request.getRequestDispatcher("index.jsp").forward(request, response); 
+       }
     }
+    
 
     /**
      * Returns a short description of the servlet.

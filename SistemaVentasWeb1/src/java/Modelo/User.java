@@ -1,23 +1,31 @@
 package Modelo;
 
 
-public class Cliente {
+public class User {
     
     int id;
     String dni;
     String nom;
+    String tel;
     String dir;
     int estadoId;
+    String user;
+    String pass;
+    int rolId;
 
-    public Cliente() {
+    public User() {
     }
 
-    public Cliente(int id, String dni, String nom, String dir, int estadoId) {
+    public User(int id, String dni, String nom, String tel, String dir, int estadoId, String user, String pass, int rolId) {
         this.id = id;
         this.dni = dni;
         this.nom = nom;
+        this.tel = tel;
         this.dir = dir;
         this.estadoId = estadoId;
+        this.user = user;
+        this.pass = pass;
+        this.rolId = rolId;
     }
 
     public int getId() {
@@ -44,6 +52,14 @@ public class Cliente {
         this.nom = nom;
     }
 
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     public String getDir() {
         return dir;
     }
@@ -60,6 +76,29 @@ public class Cliente {
         this.estadoId = estadoId;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public int getRolId() {
+        return rolId;
+    }
+
+    public void setRolId(int rolId) {
+        this.rolId = rolId;
+    }
+
    
-    
 }

@@ -1,0 +1,28 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+    padding: 0px;
+    margin: 0px;
+    border:none;
+    width: 100%;
+}
+
+#header{
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    overflow:hidden;
+}
+
+#tabla{
+    padding: 25px;
+    margin: 0 auto;
+    text-align: center;
+    width: 80px;
+    
+}
+

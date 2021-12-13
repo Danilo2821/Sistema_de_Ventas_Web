@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
 import config.Conexion;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Danim
- */
+
 public class ProductoDAO {
     
     Conexion cn = new Conexion();
@@ -23,33 +20,9 @@ public class ProductoDAO {
     PreparedStatement ps;
     ResultSet rs;
     int r;
-    //Operaciones CRUD
-    public List listar() {
-        String sql = "select * from producto";
-        // la variable list guarda el objeto empleado y lo instancia como un array
-        List<Producto> producto = new ArrayList<>();
-        try {
-            con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Producto pro = new Producto(); //Se instancia el obj empleado
-                pro.setId(rs.getInt(1)); //Se utiliza el metodo set para obtener los valores de los campos y guardarlos en el objeto em
-                pro.setNom(rs.getString(2));
-                pro.setPrecio(rs.getDouble(3));
-                pro.setStock(rs.getInt(4));
-                pro.setEstado(rs.getString(5));// todo el objeto se agrega a la variable lista
-                producto.add(pro);
-            }
-        } catch (Exception e) {
-
-        }
-        return producto;
-    }
-
     
     
-     public Producto buscar(int id){
+    public Producto buscar(int id){
         Producto pro = new Producto();
         String sql="select * from producto where idproducto="+id;
         try {
@@ -108,11 +81,37 @@ public class ProductoDAO {
         return r;
     }
     
+     
     
     
+    //Operaciones CRUD
+    public List listar() {
+        String sql = "select * from producto";
+        // la variable list guarda el objeto empleado y lo instancia como un array
+        List<Producto> producto = new ArrayList<>();
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto pro = new Producto(); //Se instancia el obj empleado
+                pro.setId(rs.getInt(1)); //Se utiliza el metodo set para obtener los valores de los campos y guardarlos en el objeto em
+                pro.setNom(rs.getString(2));
+                pro.setPrecio(rs.getDouble(3));
+                pro.setStock(rs.getInt(4));
+                pro.setEstado(rs.getString(5));// todo el objeto se agrega a la variable lista
+                pro.setDescripcion(rs.getString(6));
+                producto.add(pro);
+            }
+        } catch (Exception e) {
+
+        }
+        return producto;
+    }
+
     // el metodo agregar tiene como paramentro el objeto emplado
     public int agregar(Producto pro) {
-        String sql = "insert into producto(Nombres,Precio,Stock,Estado)values(?,?,?,?)";
+        String sql = "insert into producto(Nombres,Precio,Stock,Estado,Descripcion)values(?,?,?,?,?)";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
@@ -120,6 +119,7 @@ public class ProductoDAO {
             ps.setDouble(2, pro.getPrecio());
             ps.setInt(3, pro.getStock());
             ps.setString(4, pro.getEstado());
+            ps.setString(5, pro.getDescripcion());
             ps.executeUpdate();//Con este metodo se van a agregar los datos a la BD
 
         } catch (Exception e) {
@@ -130,16 +130,18 @@ public class ProductoDAO {
 
     public Producto listarId(int id) {
         Producto prod = new Producto();
-        String sql = "select * from producto where IdProducto="+id;
+        String sql = "select * from producto where IdProducto="+id+"";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
+                prod.setId(rs.getInt(1));
                 prod.setNom(rs.getString(2));
                 prod.setPrecio(rs.getDouble(3));
                 prod.setStock(rs.getInt(4));
                 prod.setEstado(rs.getString(5));
+                prod.setDescripcion(rs.getString(6));
             }
         } catch (Exception e) {
 
@@ -147,8 +149,9 @@ public class ProductoDAO {
         return prod;
     }
 
+    
     public int actualizar(Producto pro) {
-        String sql = "update producto set Nombres=?, Precio=?, Stock=?, Estado=? where idProducto=?";
+        String sql = "update producto set Nombres=?, Precio=?, Stock=?, Estado=?, Descripcion=? where idProducto=?";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
@@ -156,7 +159,8 @@ public class ProductoDAO {
             ps.setDouble(2, pro.getPrecio());
             ps.setInt(3, pro.getStock());
             ps.setString(4, pro.getEstado());
-            ps.setInt(5, pro.getId());
+            ps.setString(5, pro.getDescripcion());
+            ps.setInt(6, pro.getId());
             ps.executeUpdate();//Con este metodo se van a agregar los datos a la BD
 
         } catch (Exception e) {

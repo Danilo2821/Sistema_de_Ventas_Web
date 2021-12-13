@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
 import config.Conexion;
@@ -12,10 +7,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Dani
- */
 public class ClienteDAO {
 
     Conexion cn = new Conexion();
@@ -23,6 +14,8 @@ public class ClienteDAO {
     PreparedStatement ps;
     ResultSet rs;
     int r;
+
+    
 
     public Cliente buscar(String dni) {
         Cliente cl = new Cliente();
@@ -36,7 +29,7 @@ public class ClienteDAO {
                 cl.setDni(rs.getString(2));
                 cl.setNom(rs.getString(3));
                 cl.setDir(rs.getString(4));
-                cl.setEstado(rs.getString(5));
+                cl.setEstadoId(rs.getInt(5));
             }
         } catch (Exception e) {
 
@@ -44,10 +37,9 @@ public class ClienteDAO {
         return cl;//este metodo va a retornar el cliente encontrado en nuestra BD
     }
 
-    
-         public Cliente buscarNombreCliente(String clientes){
+    public Cliente buscarNombreCliente(String clientes) {
         Cliente cl = new Cliente();
-        String sql="select * from cliente where Nombres like '%"+clientes+"%'";
+        String sql = "select * from cliente where Nombres like '%" + clientes + "%'";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
@@ -61,11 +53,10 @@ public class ClienteDAO {
         } catch (Exception e) {
 
         }
-        
+
         return cl;
     }
-    
-    
+
     //Operaciones CRUD
     public List listar() {
         String sql = "select * from cliente";
@@ -81,7 +72,7 @@ public class ClienteDAO {
                 cl.setDni(rs.getString(2));
                 cl.setNom(rs.getString(3));
                 cl.setDir(rs.getString(4));
-                cl.setEstado(rs.getString(5));// todo el objeto se agrega a la variable lista
+                cl.setEstadoId(rs.getInt(5));
                 clientes.add(cl);
             }
         } catch (Exception e) {
@@ -92,14 +83,14 @@ public class ClienteDAO {
 
     // el metodo agregar tiene como paramentro el objeto emplado
     public int agregar(Cliente cl) {
-        String sql = "insert into cliente(Dni,Nombres,Direccion,Estado)values(?,?,?,?)";
+        String sql = "insert into cliente(Dni,Nombres,Direccion,Estado_id)values(?,?,?,?)";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
             ps.setString(1, cl.getDni());
             ps.setString(2, cl.getNom());
             ps.setString(3, cl.getDir());
-            ps.setString(4, cl.getEstado());
+            ps.setInt(4, cl.getEstadoId());
             ps.executeUpdate();//Con este metodo se van a agregar los datos a la BD
 
         } catch (Exception e) {
@@ -119,7 +110,7 @@ public class ClienteDAO {
                 cli.setDni(rs.getString(2));
                 cli.setNom(rs.getString(3));
                 cli.setDir(rs.getString(4));
-                cli.setEstado(rs.getString(5));
+                cli.setEstadoId(rs.getInt(5));
             }
         } catch (Exception e) {
 
@@ -128,14 +119,14 @@ public class ClienteDAO {
     }
 
     public int actualizar(Cliente cl) {
-        String sql = "update empleado set Dni=?, Nombres=?, Direccion=?, Estado=? where idCliente=?";
+        String sql = "update cliente set Dni=?, Nombres=?, Direccion=?, Estado_id=? where idCliente=?";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
             ps.setString(1, cl.getDni());
             ps.setString(2, cl.getNom());
             ps.setString(3, cl.getDir());
-            ps.setString(4, cl.getEstado());
+            ps.setInt(4, cl.getEstadoId());
             ps.setInt(5, cl.getId());
             ps.executeUpdate();//Con este metodo se van a agregar los datos a la BD
 

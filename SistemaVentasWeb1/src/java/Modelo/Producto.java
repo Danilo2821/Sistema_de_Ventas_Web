@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
-/**
- *
- * @author Danim
- */
+import java.io.InputStream;
+
+
 public class Producto {
 
     int id;
@@ -16,16 +10,20 @@ public class Producto {
     double precio;
     int stock;
     String estado;
+    String foto;
+    String descripcion;
 
     public Producto() {
     }
 
-    public Producto(int id, String nom, double precio, int stock, String estado) {
+    public Producto(int id, String nom, double precio, int stock, String estado, String foto, String descripcion) {
         this.id = id;
         this.nom = nom;
         this.precio = precio;
         this.stock = stock;
         this.estado = estado;
+        this.foto = foto;
+        this.descripcion = descripcion;
     }
 
     public int getId() {
@@ -67,9 +65,22 @@ public class Producto {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
-    
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+      
     
 }
-
-   

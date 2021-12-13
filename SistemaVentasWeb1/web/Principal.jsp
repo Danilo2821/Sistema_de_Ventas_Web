@@ -18,19 +18,25 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="#">Home</a>
+                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Principal&id=${param.id}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Producto&accion=Listar" target="myFrame">Producto</a>
+                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Producto&accion=Listar&id=${param.id}" target="myFrame">Producto</a>
                         </li>
                         <li class="nav-item">
-                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Empleado&accion=Listar" target="myFrame">Empleado</a>
+                            
+                            <c:if test="${usuario.getRolId() == 1}">
+                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Usuario&accion=Listar&id=${param.id}" target="myFrame">Usuarios</a>
+                            </c:if>
                         </li>
                         <li class="nav-item">
-                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Cliente&accion=Listar" target="myFrame">Clientes</a>
+                            <a  style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=Cliente&accion=Listar&id=${param.id}" target="myFrame">Clientes</a>
                         </li>
                         <li class="nav-item">
-                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=NuevaVenta&accion=default" target="myFrame">Nueva Venta</a>
+                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=NuevaVenta&accion=default&id=${param.id}" target="myFrame">Nueva Venta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="margin-left: 10px; border: none" class="btn btn-outline-light" href="Controlador?menu=ListaVentas&accion=ListarVenta&id=${param.id}" target="myFrame">Lista de Ventas</a>
                         </li>
                     </ul>
                 </div>
@@ -43,7 +49,7 @@
                             <img src="img/user-male-3.png" alt="60" width="60"/>
                         </a>
                         <a class="dropdown-item" href="#">${usuario.getUser()}</a>
-                        <a class="dropdown-item" href="#">Usuario@gmail.com</a>
+                        <a class="dropdown-item" href="#">${usuario.getDni()}</a>
                         <div class="dropdown-divider"></div>
                         <form action="Validar" method="POST">
                             <button name="accion" value="Salir" class="dropdown-item" href="#">Salir</button>
@@ -52,11 +58,11 @@
                 </div>
             </div>
         </nav>
-                        <div class="m-6" style="height: 900px;">
-                            <iframe name="myFrame" style="height: 100%; width: 100%; border: none"></iframe>
-                        </div>
-                        
-                        
+        <div class="m-6" style="height: 800px;">
+            <iframe name="myFrame" style="height: 100%; width: 100%; border: none"></iframe>
+        </div>
+
+
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
     </body>
